@@ -26,7 +26,12 @@ export class AlbumsComponent implements OnInit {
   constructor(private aS: AlbumService) {
     //console.log('constructor AlbumsComponent');
     //console.log(this.aS.paginate(0, 2));
+    this.aS.getAlbums2().subscribe(albums => {
+      console.log(albums);
+    })
   }
+
+ 
 
   ngOnInit() {
     // vous pouvez passer en paramètre une fonction flèchée pour sort définie dans le service
