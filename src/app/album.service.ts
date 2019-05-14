@@ -69,19 +69,26 @@ export class AlbumService {
     return this._albums == null ? 0 : this._albums.length;
   }
 
-  switchOn(album: Album): void {
-    this.buttonPlay.next(true);
-    this.getAlbums().map(al => {
-      if (album.id === al.id) { al.status = 'on'; this.subjectAlbum.next(album); }
-      else al.status = 'off';
-    });
+  switchOn(album: Album, options = httpOptions): Observable<Album> {
+    this.buttonPlay.next(false);
+    album.status = "on";
+    
+    // On peut faire une copie de l'objet album mais ce n'est pas fondamental
+    // méthode { ...album } fait une copie
+    const Album = { ...album }; 
+
+    return this.http.put<Album>(`${this.albumsUrl}/${album.id}/.json`, Album, options);
   }
 
-  switchOff(album: Album): void {
-    this.buttonPlay.next(false);
-    this.getAlbums().map(al => {
-      al.status = 'off';
-    });
+  switchOff(album: Album, options = httpOptions): Observable<Album> {
+    this.buttonPlay.next(true);
+    album.status = 'off';
+
+    // On peut faire une copie de l'objet album mais ce n'est pas fondamental
+    // méthode { ...album } fait une copie
+    const Album = { ...album };
+
+    return this.http.put<Album>(`${this.albumsUrl}/${album.id}/.json`, Album, options)
   }
 
   paginate(start: number, end: number): Observable<Album[]> {
@@ -105,7 +112,6 @@ export class AlbumService {
             if (album.title.includes(word)) Albums.push(album);
           })
         }
-
         return Albums;
       })
     );

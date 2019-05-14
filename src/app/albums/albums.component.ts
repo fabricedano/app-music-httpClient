@@ -51,7 +51,12 @@ export class AlbumsComponent implements OnInit {
 
   // TODO 
   playParent($event: Album) {
-    this.aS.switchOn($event);
+    this.aS.switchOn($event).subscribe(
+      a => {
+        console.log('appel de switchOn', a);
+        this.aS.subjectAlbum.next(a);
+      }
+    );
   }
 
   searchParent($event: Album[]) {

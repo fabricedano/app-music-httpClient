@@ -54,15 +54,7 @@ export class AlbumDetailsComponent implements OnInit, OnChanges {
     // on vérifie que c'est != null
     if (this.album) {
       this.aS.getAlbumList(this.album.id).subscribe(
-        list => {
-
-          console.log(list);
-          
-          if (list) {
-
-            this.songs = list.list
-          }
-        }
+        list => this.songs = (list) ? list.list : []
       );
 
       this.toggle();
