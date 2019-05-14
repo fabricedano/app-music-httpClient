@@ -36,7 +36,9 @@ export class AlbumsComponent implements OnInit {
   ngOnInit() {
     // vous pouvez passer en paramètre une fonction flèchée pour sort définie dans le service
     this.count = this.aS.count();
-    this.albums = this.aS.paginate(0, environment.perPage);
+    this.aS.paginate(0, environment.perPage).subscribe(
+      albums => this.albums = albums
+    );
   }
 
   ngOnChanges() {
@@ -62,14 +64,18 @@ export class AlbumsComponent implements OnInit {
     this.isSearch = false;
 
     if ($event) {
-      this.albums = this.aS.paginate(0, environment.perPage);
+      this.aS.paginate(0, environment.perPage).subscribe(
+        albums => this.albums = albums
+      );
     }
   }
 
   paginateParent($event: { start: number, end: number }) {
 
     const { start, end } = $event;
-    this.albums = this.aS.paginate(start, end);
+    this.aS.paginate(start, end).subscribe(
+      albums => this.albums = albums
+    );
   }
 
 }
