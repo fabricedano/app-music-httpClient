@@ -3,6 +3,7 @@ import { Album, List, Position } from './albums'; // types
 import { ALBUMS, ALBUM_LISTS } from './mock-albums';
 
 import { Subject, Observable } from 'rxjs'; // librarie à parti intégrée dans Angular
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -22,24 +23,19 @@ export class AlbumService {
   private _albumList: List[] = ALBUM_LISTS;
 
   private albumsUrl = 'https://app-music-3f596.firebaseio.com/albums';
-  private albumListUrl = 'https://app-music-3f596.firebaseio.com/albumLists';
+  private albumListsUrl = 'https://app-music-3f596.firebaseio.com/albumLists';
 
   // Observer => next publication d'information et Observable d'attendre des informations et d'exécuter du code
   sendCurrentNumberPage = new Subject<{ current: number, position: Position }>();
-
   subjectAlbum = new Subject<Album>();
-
   buttonPlay = new Subject<boolean>();
 
+  // http ~ HttpClient service Angular pour faire du XMLHttpRequest version Framework
   constructor(private http: HttpClient) { }
 
-  getAlbums(order = (a, b) => b.duration - a.duration): Album[] {
-    return this._albums.sort(order);
-  }
-
   // RxJS ~ HttpClient
-  getAlbums2(order = (a, b) => b.duration - a.duration): Observable<Album[]> {
-    
+  getAlbums(order = (a, b) => b.duration - a.duration): Observable<Album[]> {
+
     return this.http.get<Album[]>(this.albumsUrl + '/.json', httpOptions).pipe(
 
       // 1./ Préparation des données avec _.values pour avoir un format exploitable dans l'application => Array de values JSON
@@ -55,51 +51,67 @@ export class AlbumService {
     );
   }
 
-  getAlbum(id: string): Album {
-    return this._albums.find(list => list.id === id);
+  getAlbum(id: string, options = httpOptions): Observable<Album> {
+
+    return this.http.get<Album>(`${this.albumsUrl}/${id}/.json`, options);
   }
 
-  getAlbumList(id: string): List {
-    return this._albumList.find(l => l.id === id);
+  getAlbumList(id: string, options = httpOptions): Observable<List> { 
+
+    return this.http.get<List>(`${this.albumListsUrl}/${id}/.json`, options);
   }
 
   count(): number {
     return this._albums == null ? 0 : this._albums.length;
   }
 
-  switchOn(album: Album): void {
-    this.buttonPlay.next(true);
-    this.getAlbums().map(al => {
-      if (album.id === al.id) { al.status = 'on'; this.subjectAlbum.next(album); }
-      else al.status = 'off';
-    });
-  }
-
-  switchOff(album: Album): void {
+  switchOn(album: Album, options = httpOptions): Observable<Album> {
     this.buttonPlay.next(false);
-    this.getAlbums().map(al => {
-      al.status = 'off';
-    });
+    album.status = "on";
+    
+    // On peut faire une copie de l'objet album mais ce n'est pas fondamental
+    // méthode { ...album } fait une copie
+    const Album = { ...album }; 
+
+    return this.http.put<Album>(`${this.albumsUrl}/${album.id}/.json`, Album, options);
   }
 
-  paginate(start: number, end: number): Album[] {
-    return this.getAlbums().slice(start, end);
+  switchOff(album: Album, options = httpOptions): Observable<Album> {
+    this.buttonPlay.next(true);
+    album.status = 'off';
+
+    // On peut faire une copie de l'objet album mais ce n'est pas fondamental
+    // méthode { ...album } fait une copie
+    const Album = { ...album };
+
+    return this.http.put<Album>(`${this.albumsUrl}/${album.id}/.json`, Album, options)
   }
 
-  search(word: string | null): Album[] {
+  paginate(start: number, end: number): Observable<Album[]> {
 
-    if (word == null) return this.getAlbums();
+    return this.http.get<Album[]>(this.albumsUrl + '/.json', httpOptions).pipe(
+      map(albums => _.values(albums)),
+      map(albums => albums.slice(start, end)),
+    );
+  }
 
-    let albums = [];
+  search(word: string | null): Observable<Album[]> {
 
-    if (word.length > 3) {
+    return this.http.get<Album[]>(this.albumsUrl + '/.json', httpOptions).pipe(
 
-      this.getAlbums().forEach(album => {
-        if (album.title.includes(word)) albums.push(album);
-      });
-    }
+      map(albums => _.values(albums)),
 
-    return albums;
+      map(albums => {
+        let Albums = [];
+        if (word.length > 3) {
+          albums.forEach(album => {
+            if (album.title.includes(word)) Albums.push(album);
+          })
+        }
+
+        return Albums;
+      })
+    );
   }
 
 }
