@@ -6,6 +6,7 @@ import { AlbumDescriptionComponent } from './album-description/album-description
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { GuardService } from './guard.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AlbumComponent } from './admin/album/album.component';
 
 const routes: Routes = [
   {
@@ -27,7 +28,7 @@ const routes: Routes = [
   },
   {
     path : 'dashboard', canActivate : [GuardService],
-    component : DashboardComponent
+    component : AlbumComponent
   },
   {
     path : '**',

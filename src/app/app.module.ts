@@ -16,6 +16,7 @@ import { PaginateComponent } from './paginate/paginate.component';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { AdminComponent } from './admin/admin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AdminModule } from './admin/admin.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    AdminModule
   ],
   providers: [],
   bootstrap: [AppComponent]

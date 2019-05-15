@@ -1,3 +1,22 @@
-<p>
-  admin works! Crud
-</p>
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Update</th>
+      <th scope="col">Name</th>
+      <th scope="col">Title</th>
+      <th scope="col">Duration</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let album of albums">
+      <th scope="row">{{ album.id }}</th>
+      <td>UPDATE TODO</td>
+      <td>{{ album.name }}</td>
+      <td>{{ album.title }}</td>
+      <td>{{ album.duration }}</td>
+      <td>DELETE TODO</td>
+    </tr>
+  </tbody>
+</table>
