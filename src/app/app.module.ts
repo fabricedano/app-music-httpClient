@@ -14,6 +14,8 @@ import { AlbumDescriptionComponent } from './album-description/album-description
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PaginateComponent } from './paginate/paginate.component';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
+import * as firebase from 'firebase';
+import { DashboardComponentComponent } from './dashboard-component/dashboard-component.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { AudioPlayerComponent } from './audio-player/audio-player.component';
     AlbumDescriptionComponent,
     PageNotFoundComponent,
     PaginateComponent,
-    AudioPlayerComponent
+    AudioPlayerComponent,
+    DashboardComponentComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import { AudioPlayerComponent } from './audio-player/audio-player.component';
     HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  
 })
 export class AppModule { }
