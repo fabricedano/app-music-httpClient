@@ -11,36 +11,34 @@ import { Position } from '../albums';
   styleUrls: ['./paginate.component.scss']
 })
 export class PaginateComponent implements OnInit {
-
   @Output() paginate: EventEmitter<{ start: number, end: number }> = new EventEmitter();
-  @Input() position : Position;
+  @Input() position: Position;
+  @Input() changePerpage: number; // permet de fixer le nombre d'album par page si définit ?
 
-  perPage: number = environment.perPage; // nombre d'albums par page
+  perPage: number; // nombre d'albums par page
   pages: number[] = []; // numéro des pages 1, 2, 3, ...
   total: number = 0; // total des albums
   currentPage: number; // page courante
   numberPages: number = 0; // nombre de page(s)
 
   constructor(private aS: AlbumService) {
-    this.total = this.aS.count();
+    this.aS.count().subscribe(total => this.init(total));
 
     // on s'abonne à l'observable et donc on attend de l'info
     // envoyer par l'observer, on est en attente
     this.aS.sendCurrentNumberPage.subscribe(
       info => {
-      //  console.log(info, this.position);
-      if(this.position !== info.position) this.currentPage = info.current;
+        //  console.log(info, this.position);
+        if (this.position !== info.position) this.currentPage = info.current;
       }
     );
   }
 
-  ngOnInit() {
-    // initialiser la création des numéros de page
-    this.init();
-  }
+  ngOnInit() {}
 
-  init(page: number = 1) {
-    this.numberPages = Math.ceil(this.total / this.perPage);
+  init(total, page: number = 1) {
+    this.perPage = this.changePerpage || environment.perPage || 8; // nombre d'album(s) par page souhaité
+    this.numberPages = Math.ceil(total / this.perPage);
     this.currentPage = page;
 
     for (let p = 0; p < this.numberPages; p++) this.pages.push(p + 1);
@@ -55,7 +53,7 @@ export class PaginateComponent implements OnInit {
     this.paginate.emit({ start: start, end: end });
 
     // role d'observer => next pour notifier de l'information
-    this.aS.sendCurrentNumberPage.next({ current : page, position : this.position })
+    this.aS.sendCurrentNumberPage.next({ current: page, position: this.position })
   }
 
   next() {

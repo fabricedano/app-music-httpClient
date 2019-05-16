@@ -6,7 +6,8 @@
 export const environment = {
   production: false,
   perPage : 3,
-  title : "Web App music"
+  title : "Web App music",
+  perPageAdmin: 5
 };
 
 /*

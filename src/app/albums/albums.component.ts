@@ -13,21 +13,19 @@ import { environment } from '../../environments/environment';
 export class AlbumsComponent implements OnInit {
 
   albums: Album[] = [];
-  count: number;
   isSearch: boolean = false;
-
   position = Position; // comme valeurs positions
-
   selectedAlbum: Album;
   title: string = "Details des chansons d'un album...";
+  perPage: number = environment.perPage;
 
   // service on doit DI ~ préparation des services par Angular éventuellement dépend d'autre(s) service(s)
-  constructor(private aS: AlbumService) { }
+  constructor(private aS: AlbumService) {
+  }
 
   ngOnInit() {
     // vous pouvez passer en paramètre une fonction flèchée pour sort définie dans le service
-    this.count = this.aS.count();
-    this.aS.paginate(0, environment.perPage).subscribe(
+    this.aS.paginate(0, this.perPage).subscribe(
       albums => this.albums = albums
     );
   }
