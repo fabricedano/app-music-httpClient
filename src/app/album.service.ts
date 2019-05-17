@@ -56,7 +56,7 @@ export class AlbumService {
     return this.http.get<Album>(`${this.albumsUrl}/${id}/.json`, options);
   }
 
-  getAlbumList(id: string, options = httpOptions): Observable<List> { 
+  getAlbumList(id: string, options = httpOptions): Observable<List> {
 
     return this.http.get<List>(`${this.albumListsUrl}/${id}/.json`, options);
   }
@@ -75,7 +75,7 @@ export class AlbumService {
     album.status = "on";
     // On peut faire une copie de l'objet album mais ce n'est pas fondamental
     // méthode { ...album } fait une copie
-    const Album = { ...album }; 
+    const Album = { ...album };
 
     return this.http.put<Album>(`${this.albumsUrl}/${album.id}/.json`, Album, options);
   }
@@ -114,6 +114,21 @@ export class AlbumService {
         return Albums;
       })
     );
+  }
+
+  addAlbum(album: Album): Observable<any> {
+
+    return this.http.post<any>(`${this.albumsUrl}/.json`, album);
+  }
+
+  updateAlbum(ref: string, album: Album): Observable<any> {
+
+    return this.http.put<any>(`${this.albumsUrl}/${ref}/.json`, album);
+  }
+
+  deleteAlbum(id : string): Observable<any> {
+
+    return this.http.delete<void>(this.albumsUrl + `/${id}/.json`);
   }
 
 }

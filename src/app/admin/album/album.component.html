@@ -11,17 +11,19 @@
       <th scope="col">Name</th>
       <th scope="col">Title</th>
       <th scope="col">Duration</th>
+      <th scope="col">Price Ether</th>
       <th scope="col">Delete</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let album of albums | async">
       <th scope="row">{{ album.id }}</th>
-      <td>UPDATE TODO</td>
+      <button (click)="Onupdate(album.id)" class="btn btn-primary">Update</button>
       <td>{{ album.name }}</td>
       <td>{{ album.title }}</td>
       <td>{{ album.duration }}</td>
-      <td>DELETE TODO</td>
+      <td>{{ album.price || 'no proposition' }}</td>
+      <button (click)="Ondelete(album)" class="btn btn-danger">Delete</button>
     </tr>
   </tbody>
 </table>

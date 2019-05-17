@@ -4,40 +4,40 @@ import { AlbumsComponent } from './albums/albums.component';
 import { LoginComponent } from './login/login.component';
 import { AlbumDescriptionComponent } from './album-description/album-description.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { GuardService } from './guard.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { GuardService } from './guard.service';
 import { AlbumComponent } from './admin/album/album.component';
 
 const routes: Routes = [
   {
-    path : 'albums',
-    component : AlbumsComponent
+    path: 'albums',
+    component: AlbumsComponent
   },
   {
     path: '',
-    redirectTo : '/albums',
-    pathMatch : 'full' 
+    redirectTo: '/albums',
+    pathMatch: 'full'
   },
   {
-    path : 'login',
-    component : LoginComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path : 'album/:id',
-    component : AlbumDescriptionComponent
+    path: 'album/:id',
+    component: AlbumDescriptionComponent
   },
   {
-    path : 'dashboard', canActivate : [GuardService],
-    component : AlbumComponent
+    path: 'dashboard', canActivate: [GuardService],
+    component: AlbumComponent
   },
   {
-    path : '**',
-    component : PageNotFoundComponent
+    path: '**',
+    component: PageNotFoundComponent
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -8,7 +8,11 @@ export class Album {
     status : string;
     url?: string;
     like?: string;
-    tags?: Array<string>
+    tags?: Array<string>;
+    priceTTC? : number;
+    priceHT? : number;
+    price? : number | string;
+    proposition? : number | string;
 }
 
 export class List {
