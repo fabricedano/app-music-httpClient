@@ -1,4 +1,6 @@
-
+<div *ngIf="message" class="alert alert-primary" role="alert">
+  {{message}}
+</div>
 <p>
   <button type="button" class="btn btn-dark" routerLink="/admin/add">Add</button>
 </p>
@@ -18,12 +20,12 @@
   <tbody>
     <tr *ngFor="let album of albums | async">
       <th scope="row">{{ album.id }}</th>
-      <button (click)="Onupdate(album.id)" class="btn btn-primary">Update</button>
+      <td><button type="button" routerLink="/admin/udpate/{{album.id}}" class="btn btn-warning">Update</button></td>
       <td>{{ album.name }}</td>
       <td>{{ album.title }}</td>
       <td>{{ album.duration }}</td>
       <td>{{ album.price || 'no proposition' }}</td>
-      <button (click)="Ondelete(album)" class="btn btn-danger">Delete</button>
+      <td><button type="button" (click)="destroy(album)" class="btn btn-danger">Delete</button></td>
     </tr>
   </tbody>
 </table>
